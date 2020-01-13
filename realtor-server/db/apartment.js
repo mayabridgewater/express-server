@@ -35,10 +35,10 @@ function byId(apartmentId) {
     });
 };
    
-function addApartment(id, {address, city, price, rooms, baths, sqft, description, sale_status, availability, property_type, main_image, status = 'pending'}) {
+function addApartment(id, {address, city, price, rooms, baths, sqft, description, sale_status, property_type, main_image}) {
     return new Promise((resolve, reject) => {
 
-        connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, rooms, baths, sqft, description, sale_status, availability, property_type, main_image, status], 
+        connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, rooms, baths, sqft, description, sale_status, property_type, main_image], 
         function(error, results, fields) {
 
             if (error) reject(error);
@@ -64,10 +64,5 @@ module.exports = {
     byId,
     addApartment,
     updateApartmentHistory
-
-module.exports = {
-    getApartments,
-    byId,
-    addApartment
 
 }
