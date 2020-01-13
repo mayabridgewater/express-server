@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {getApartments, byId, addApartment} = require('../db/apartment');
+
+const {getApartments, byId, addApartment, updateApartmentHistory} = require('../db/apartment');
+
 const {checkPermissions} = require('../db/users');
 
 router.get('/', function(req, res, next) {
@@ -21,11 +23,17 @@ router.post('/', function(req, res, next) {
               res.status(400).json({error: 'Request not authorized'})
           } else {
               addApartment(req.cookies.user.id, req.body)
+
+              .then(results => updateApartmentHistory(results[0][0].id, results[0][0].user_id, results[0][0].status))
+
               .then(res.status(200).json('apartment added!'))
               .catch(error => res.status(400).json({error: error.message}))
           }
       });
+
 });
+
+
 
 
 module.exports = router
