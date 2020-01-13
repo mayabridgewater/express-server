@@ -37,8 +37,10 @@ function byId(apartmentId) {
    
 function addApartment(id, {address, city, price, rooms, baths, sqft, description, sale_status, availability, property_type, main_image, status = 'pending'}) {
     return new Promise((resolve, reject) => {
+
         connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, rooms, baths, sqft, description, sale_status, availability, property_type, main_image, status], 
         function(error, results, fields) {
+
             if (error) reject(error);
             else resolve(results)
         });
@@ -62,4 +64,10 @@ module.exports = {
     byId,
     addApartment,
     updateApartmentHistory
+
+module.exports = {
+    getApartments,
+    byId,
+    addApartment
+
 }
