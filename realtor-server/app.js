@@ -3,8 +3,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
+const crypto = require('crypto');
 
 var indexRouter = require('./routes/index');
+const signUpRouter = require('./routes/signUp');
 const loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var apartmentsRouter = require('./routes/apartments');
@@ -20,6 +22,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/signup', function(req, res, next) {
+    console.log(req.body);
+    let token = crypto.pbkdf2Sync(req.body.password, 'realtorproject', 10000, 64, 'sha512');
+    req.body.password = token.toString('base64');
+    next();
+},
+signUpRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/apartments', apartmentsRouter);
