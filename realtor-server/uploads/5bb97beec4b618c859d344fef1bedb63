@@ -1,0 +1,183 @@
+/** --  1  --  **/
+
+/** Create a function that returns the fourth (4th) item in an array **/
+
+function get4thItem(arr) {
+    return arr[3]
+}
+get4thItem([1,2,3,4,5,6,7,8,9,10]); // returns 4
+get4thItem([null,true,false,'test','test2']); // returns 'test'
+
+
+/* ================================================================================= */
+
+
+/** --  2  --  **/
+/** Given the following HTML:
+ <!DOCTYPE html>
+ <html>
+ <body>
+    <p>I need to be removed!</p>
+    <p>I should stay here!</p>
+</body>
+</html>
+
+ Write the code necessary to hide the first p element from the body.
+ **/
+
+function hideFirstParagraph() {
+    var tags = document.getElementsByTagName('p');
+    tags[0].style.display = 'none'
+}
+hideFirstParagraph();
+
+
+/* ================================================================================= */
+
+
+/** --  3  --  **/
+/** Create a function that repeats a string n times.
+ * n must be a positive number.
+ * If not it should count as zero.
+ * The first parameter is the string to repeat, and the second parameter is
+ * the number of times to repeat. **/
+
+function repeat(str, times) {
+    var answer = '';
+    if (times <= 0) {
+        return ''
+    }
+    for (var i = 1; i <= times; i++) {
+        answer += str
+    }
+    return answer
+}
+repeat('hello', 2); // returns 'hellohello'
+repeat('.', 3); // returns '...'
+repeat('cat', 1); // returns 'cat'
+repeat('cat', -1); // returns ''
+
+
+/* ================================================================================= */
+
+
+/** --  4  --  **/
+/** Create a function that determines if every item in an array is a number.
+ * The array will always have at least 1 item.
+ * It should return either true or false. **/
+
+function containsOnlyNumbers(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (typeof arr[i] != "number") {
+            return false
+        }
+    }
+    return true
+}
+containsOnlyNumbers(['1',200,-42,0.3,10]); // returns true
+containsOnlyNumbers([0.1,'str',2,1000,-9]); // returns false
+
+
+
+/* ================================================================================= */
+
+
+/** --  5  --  **/
+/** Create a function that returns the largest number in an array of numbers.
+ * The array will always have at least 1 number. **/
+
+function largest(numbers) {
+    if (numbers.length == 1) {
+        return numbers[0]
+    } else {
+        var max = 0;
+        for (var i = 0; i < numbers.length; i++) {
+            if (numbers[i] > max) {
+                max = numbers[i]
+            }
+        }
+        return max
+    }
+}
+largest([1,2,3,4,5]); // returns 5
+largest([-100,Infinity,5,2,7218902]); // returns Infinity
+largest([0]); // returns 0
+
+
+
+/* ================================================================================= */
+
+
+
+/** --  6  --  **/
+/** Create a function that masks a string of numbers, such as a credit card number.
+ * All numbers except the last 4 should be replaced with the character #. **/
+
+function mask(str) {
+    if (str.length <= 4) {
+        return str
+    } else {
+        var newStr ='';
+        for (var i = 0; i < str.length - 4; i++) {
+            newStr += str[i].replace(str[i], '#')
+
+        }
+        return newStr.concat(str.slice(i))
+    }
+}
+mask('123456789'); // returns '#####6789'
+mask('12345'); // returns '#2345'
+mask('1234'); // returns '1234'
+mask(''); // returns ''
+
+
+
+/* ================================================================================= */
+
+
+
+/** --  7  --  **/
+/** Create a function that takes a string and returns it with all of the vowels (letters a, e, i, o, u) removed. */
+
+function removeVowels(str) {
+    var vowels = ['a', 'e', 'i', 'o', 'u'];
+    var newStr = '';
+    for (var i = 0; i < str.length; i++) {
+        var check = str[i].toLowerCase();
+        if (vowels.includes(check)) {
+            newStr += str[i].replace(str[i], '')
+        } else {
+            newStr += str[i]
+        }
+    }
+    return newStr
+}
+removeVowels('Hello, world!'); // returns 'Hll, wrld!'
+removeVowels('XaAeEiIoOuUX'); // returns 'XX'
+removeVowels(''); // returns ''
+
+
+
+/* ================================================================================= */
+
+
+
+/** --  8  --  **/
+/**
+ * Suppose the web page you are building requires that all elements with a class of empty
+ * have their innerHTML content emptied (made an empty string) once the button
+ * with an id of btn-empty is clicked.
+
+ Write the code necessary to do this:
+ */
+function makeEmpty() {
+    var button = document.getElementById('btn-empty');
+    button.addEventListener('click', emptyList);
+}
+function emptyList() {
+    var toEmpty = document.getElementsByClassName('empty');
+    for (var i = 0; i < toEmpty.length; i++) {
+        toEmpty[i].innerHTML = ''
+    }
+}
+makeEmpty()

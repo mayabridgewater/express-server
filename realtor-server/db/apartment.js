@@ -1,7 +1,7 @@
 const {connection} = require('./config');
 const {Builder} = require('./builder');
 
-function getApartments({user_id, address, city, price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability='available', property_type, status_id='pending', page=1, size =3}) {
+function getApartments({user_id, address, city, price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability='available', property_type, status_id='pending', page=1, size =20}) {
    return new Promise((resolve, reject) => {
        const {query, params} = new Builder()
                                     .allApartments(page, size)
@@ -59,10 +59,28 @@ function updateApartmentHistory(apartmentId, userId, status, description) {
     });
 };
 
+function updateApartment({id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, main_image, status='pending'}) {
+    return new Promise((resolve, reject) => {
+        connection.query(`call update_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+          [id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, main_image, status], 
+            function(error, results, fields) {
+                if (error) {
+                    console.log(error);
+                    reject(error)
+                } else {
+                    console.log(results);
+                    resolve(results)
+                }
+        });
+    });
+};
+
+
 module.exports = {
     getApartments,
     byId,
     addApartment,
-    updateApartmentHistory
+    updateApartmentHistory,
+    updateApartment
 
 }

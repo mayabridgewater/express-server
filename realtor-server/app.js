@@ -24,7 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/signup', function(req, res, next) {
     console.log(req.body);
-    // const token = crypto.pbkdf2Sync(req)
+    let token = crypto.pbkdf2Sync(req.body.password, 'realtorproject', 10000, 64, 'sha512');
+    req.body.password = token.toString('base64');
+    next();
 },
 signUpRouter);
 app.use('/login', loginRouter);
