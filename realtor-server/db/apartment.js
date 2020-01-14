@@ -44,6 +44,7 @@ function addApartment(id, {address, city, price, rooms, baths, sqft, description
     });
 };
 
+
 module.exports = {
     getApartments,
     byId,
