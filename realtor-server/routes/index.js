@@ -3,9 +3,9 @@ var router = express.Router();
 var multer = require('multer');
 var multer = multer;
 var storage = multer.diskStorage({
-  destination: './uploads/',
+  destination: 'public/images/',
   filename: function (req, file, cb) {
-    cb(null, file.originalname)
+    cb(null, new Date().getMilliseconds() + file.originalname)
   }
 });
 var upload = multer({ storage: storage });
@@ -50,9 +50,13 @@ router.get('/upload', function(req, res, next) {
   `);
 });
 
-router.post('/uploadfile', upload.single('myFile'), function(req, res, next) {
-  console.log('uploaded single file', req.file);
-  res.send(req.file)
+router.post('/uploadmultiple', upload.array('myFiles', 12), function(req, res, next) {
+  console.log('uploaded files', req.files, req.body);
+  let result = '';
+  for (let i = 0; i < req.files.length; i++) {
+    result += `<img src= 'images/${req.files[i].filename}'/>` 
+  }
+  res.send(result)
 });
 
 module.exports = router;
