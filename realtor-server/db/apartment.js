@@ -18,7 +18,7 @@ function getApartments({user_id, address, city, price, number_of_room, number_of
                                     .property(property_type)
                                     .siteStatus(status_id)
                                     .build();
-     connection.query(`SELECT a.* from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
+     connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
         if (error) reject(error);
         else resolve(results);
     });
