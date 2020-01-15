@@ -31,7 +31,7 @@ router.get('/upload', function(req, res, next) {
    
   <!-- MULTIPLE FILES -->
    
-  <form action="/uploadmultiple"  enctype="multipart/form-data" method="POST">
+  <form action="/apartments"  enctype="multipart/form-data" method="POST">
     Select images: <input type="file" name="myFiles" multiple>
     <input type="submit" value="Upload your files"/>
   </form>
@@ -50,13 +50,13 @@ router.get('/upload', function(req, res, next) {
   `);
 });
 
-router.post('/uploadmultiple', upload.array('myFiles', 12), function(req, res, next) {
-  console.log('uploaded files', req.files, req.body);
-  let result = '';
-  for (let i = 0; i < req.files.length; i++) {
-    result += `<img src= 'images/${req.files[i].filename}'/>` 
-  }
-  res.send(result)
-});
+// router.post('/uploadmultiple', upload.array('myFiles', 12), function(req, res, next) {
+//   console.log('uploaded files', req.files, req.body);
+//   let result = '';
+//   for (let i = 0; i < req.files.length; i++) {
+//     result += `<img src= 'images/${req.files[i].filename}'/>` 
+//   }
+//   res.send(result)
+// });
 
 module.exports = router;
