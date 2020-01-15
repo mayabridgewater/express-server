@@ -9,6 +9,17 @@ const {getApartments,
 
 const {checkPermissions} = require('../db/users');
 
+var multer = require('multer');
+// var multer = multer;
+var storage = multer.diskStorage({
+  destination: 'public/images/',
+  filename: function (req, file, cb) {
+    cb(null, new Date().getMilliseconds() + file.originalname)
+  }
+});
+var upload = multer({ storage: storage });
+
+
 router.get('/', async function(req, res, next) {
     try {
         const apartments = await getApartments(req.query);
@@ -27,13 +38,16 @@ router.get('/:apartmentId', async function(req, res, next) {
     }
 });
 
-router.post('/', async function(req, res, next) {
+router.post('/', upload.array('myFiles', 12), async function(req, res, next) {
+    console.log('uploaded files', req.files, req.body);
+    //send first pic to addApartment, remove from list
     try {
         const permission = await checkPermissions('add_apartment', req.cookies.user);
         if (permission.length === 0) {
             res.status(400).json({error: 'Request not authorized'})
         } else {
             const newApartment = await addApartment(req.cookies.user.id, req.body);
+            //send rest of images to image table
             const update = await updateApartmentHistory(newApartment[0][0].id, newApartment[0][0].user_id, newApartment[0][0].status);
             res.status(200).json('apartment added!');
         }
@@ -57,6 +71,15 @@ router.put('/', function(req, res, next) {
     });
 });
 
+
+// router.post('/uploadmultiple', upload.array('myFiles', 12), function(req, res, next) {
+//     console.log('uploaded files', req.files, req.body);
+//     let result = '';
+//     for (let i = 0; i < req.files.length; i++) {
+//       result += `<img src= '../images/${req.files[i].filename}'/>` 
+//     }
+//     res.send(result)
+//   });
 
 
 
