@@ -11,6 +11,7 @@ const loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var apartmentsRouter = require('./routes/apartments');
 const countryRouter = require('./routes/countries');
+const cityRouter = require('./routes/cities');
 
 
 var app = express();
@@ -34,6 +35,7 @@ app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/apartments', apartmentsRouter);
 app.use('/countries', countryRouter);
+app.use('/cities', cityRouter);
 
 
 module.exports = app;
