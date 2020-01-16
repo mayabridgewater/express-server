@@ -6,7 +6,7 @@ router.post('/', function(req, res, next) {
     registerUser(req.body)
       .then(results => updateUserHist(results[0][0].id, results[0][0].status))
       .then(res.status(200).json(`Welcome`))
-      .catch(error => res.status(500).json({error: error.message}))
+      .catch(error => res.status(500).json(console.log(error.message)))
 });
 
 

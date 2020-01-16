@@ -10,10 +10,11 @@ const signUpRouter = require('./routes/signUp');
 const loginRouter = require('./routes/login');
 var usersRouter = require('./routes/users');
 var apartmentsRouter = require('./routes/apartments');
+const countryRouter = require('./routes/countries');
 
 
 var app = express();
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,6 +33,7 @@ signUpRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/apartments', apartmentsRouter);
+app.use('/countries', countryRouter);
 
 
 module.exports = app;
