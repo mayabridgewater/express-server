@@ -35,13 +35,16 @@ function byId(apartmentId) {
     });
 };
    
-function addApartment(id, {address, city, price, rooms, baths, sqft, description, sale_status, property_type, main_image}) {
+function addApartment(id, {address, city, price, number_of_room, number_of_bath, sqft, description, sale_status, property_type}, main_image) {
     return new Promise((resolve, reject) => {
 
-        connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, rooms, baths, sqft, description, sale_status, property_type, main_image], 
+        connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, number_of_room, number_of_bath, sqft, description, sale_status, property_type, main_image], 
         function(error, results, fields) {
 
-            if (error) reject(error);
+            if (error) {
+                reject(error);
+            } 
+                
             else resolve(results)
         });
     });

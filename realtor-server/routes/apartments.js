@@ -38,16 +38,20 @@ router.get('/:apartmentId', async function(req, res, next) {
     }
 });
 
-router.post('/', upload.array('myFiles', 12), async function(req, res, next) {
-    console.log('uploaded files', req.files, req.body);
-    //send first pic to addApartment, remove from list
+//upload.fields([{name: 'images', maxCount: 12}])
+
+router.post('/', upload.single('main_image'), async function(req, res, next) {
+    let main_image = req.file.path;
+    main_image = main_image.split('/')[2];
+    main_image = '/images/'+main_image;
+    // console.log('images', req.files, req.files)
     try {
-        const permission = await checkPermissions('add_apartment', req.cookies.user);
+        const permission = await checkPermissions('add_apartment', JSON.parse(req.cookies.user));
         if (permission.length === 0) {
             res.status(400).json({error: 'Request not authorized'})
         } else {
-            const newApartment = await addApartment(req.cookies.user.id, req.body);
-            //send rest of images to image table
+            const newApartment = await addApartment(JSON.parse(req.cookies.user).id, req.body, main_image);
+            //send images to image table
             const update = await updateApartmentHistory(newApartment[0][0].id, newApartment[0][0].user_id, newApartment[0][0].status);
             res.status(200).json('apartment added!');
         }
