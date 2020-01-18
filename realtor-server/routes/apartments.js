@@ -21,6 +21,7 @@ var upload = multer({ storage: storage });
 
 
 router.get('/', async function(req, res, next) {
+    console.log(req.query);
     try {
         const apartments = await getApartments(req.query);
         res.status(200).json(apartments)

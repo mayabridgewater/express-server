@@ -1,8 +1,8 @@
 const {connection} = require('./config');
 const {Builder} = require('./builder');
 
-function getApartments({user_id, address, city, price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability='available', property_type, status_id='pending', page=1, size =20}) {
-   return new Promise((resolve, reject) => {
+function getApartments({user_id, address, city, price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability='available', property_type, status='approved', page=1, size =20}) {
+    return new Promise((resolve, reject) => {
        const {query, params} = new Builder()
                                     .allApartments(page, size)
                                     .userId(user_id)
@@ -16,11 +16,14 @@ function getApartments({user_id, address, city, price, number_of_room, number_of
                                     .saleStatus(sale_status)
                                     .availability(availability)
                                     .property(property_type)
-                                    .siteStatus(status_id)
+                                    .siteStatus(status)
                                     .build();
      connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
         if (error) reject(error);
-        else resolve(results);
+        else {
+            // console.log(results);
+            resolve(results)
+        };
     });
   });
 };
