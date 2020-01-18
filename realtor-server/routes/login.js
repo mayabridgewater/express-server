@@ -10,7 +10,7 @@ router.post('/', async function(req, res, next) {
     if (user.length === 0) { 
       res.status(401).json({error: 'invalid email or password'})
     } else {
-        res.cookie('user', user[0], {maxAge: 1000 * 60 *60 *24});
+        res.cookie('user', JSON.stringify(user[0]), {maxAge: 1000 * 60 *60 *24});
         console.log(req.cookies);
         res.status(200).json('logged in!');
       }
