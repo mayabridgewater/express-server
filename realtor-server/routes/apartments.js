@@ -21,7 +21,6 @@ var upload = multer({ storage: storage });
 
 
 router.get('/', async function(req, res, next) {
-    console.log(req.query);
     try {
         const apartments = await getApartments(req.query);
         res.status(200).json(apartments)
@@ -62,13 +61,14 @@ router.post('/', upload.single('main_image'), async function(req, res, next) {
 });
 
 router.put('/', function(req, res, next) {
-    checkPermissions('update_apartment', req.cookies.user)
+    console.log(req.body);
+    checkPermissions('update_apartment', JSON.parse(req.cookies.user))
       .then( results => {
           if (results.length === 0) {
             res.status(400).json({error: 'Request not authorized'})
           } else {
               updateApartment(req.body)
-                .then(updateApartmentHistory(req.body.id, req.body.user_id, 'pending', 'update made'))
+                .then(updateApartmentHistory(req.body.id, req.body.user_id, req.body.status, req.body.statusdescription))
                   .then(res.status(200).json('apartment updated, awaiting approval'))
                   .catch(error => res.status(500).json(error))
 
