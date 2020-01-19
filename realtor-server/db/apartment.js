@@ -54,6 +54,7 @@ function addApartment(id, {address, city, price, number_of_room, number_of_bath,
 };
 
 function updateApartmentHistory(apartmentId, userId, status, description) {
+    console.log(apartmentId);
     return new Promise((resolve, reject) => {
         connection.query(`call update_apartment_hist(?, ?, ?, ?)`, [apartmentId, userId, status, description], function(error, results, feilds) {
             if (error) {
