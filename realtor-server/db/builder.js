@@ -20,7 +20,7 @@ class Builder {
     cityId(city) {
         if (city) {
             this.query += ' and A.city_id = ?';
-            this.params.push(cityId);
+            this.params.push(city);
             return this
         }
         return this
@@ -86,7 +86,7 @@ class Builder {
     }
     property(type) {
         if (type) {
-            this.query =+ ' and property_type = ?';
+            this.query += ' and property_type = ?';
             this.params.push(type);
             return this
         }
