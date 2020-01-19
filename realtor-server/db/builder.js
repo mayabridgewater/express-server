@@ -1,104 +1,107 @@
 class Builder {
     constructor() {
-        this.queries = []
+        this.query = '',
+        this.params = []
     }
     allApartments(page, size) {
-        this.queries.push({page: page});
-        this.queries.push({size: size});
+        this.query += ' limit ?, ?';
+        this.params.push((page-1)*size);
+        this.params.push(size);
         return this
     }
     userId(userId) {
         if(userId) {
-            this.queries.push({'U.user_id': userId});
-            return this
-        }
-        return this
-    }
-    byAddress(address) {
-        if(address) {
-            this.queries.push({address: address});
+            this.query += ' and U.user_id = ?';
+            this.params.push(userId);
             return this
         }
         return this
     }
     cityId(city) {
-        
         if (city) {
-            this.queries.push({'A.city_id': cityId});
+            this.query += ' and A.city_id = ?';
+            this.params.push(cityId);
             return this
         }
         return this
     }
-    price(price) {
-        if (price) {
-            this.queries.push({price: price});
-            return this
+    minPrice(min_price) {
+        if (min_price) {
+            this.query += ' and price > ?';
+            this.params.push(min_price)
+        }
+        return this
+    }
+    maxPrice(max_price) {
+        if (max_price) {
+            this.query += ' and price < ?';
+            this.params.push(max_price)
         }
         return this
     }
     numRooms(rooms) {
         if (rooms) {
-            this.queries.push({number_of_room: rooms});
+            this.query += ' and number_of_room >= ?';
+            this.params.push(rooms);
             return this
         }
         return this
     }
     numBaths(baths) {
         if (baths) {
-            this.queries.push({number_of_bath: baths});
+            this.query += ' and number_of_bath >= ?';
+            this.params.push(baths);
             return this
         }
         return this
     }
     apartmentSize(sqft) {
         if (sqft) {
-            this.queries.push({sqft: sqft});
+            this.query =+ ' and sqft >= ?';
+            this.params.push(sqft);
             return this
         }
         return this
     }
     created(date) {
         if (date) {
-            this.queries.push({created_on: date});
+            this.query += ' and created_on >= ?';
+            this.params.push(date);
             return this
         }
         return this
     }
     saleStatus(status) {
         if (status) {
-            this.queries.push({sale_status: status});
+            this.query += ' and sale_status = ?';
+            this.params.push(status);
             return this
         }
         return this
     }
     availability(type) {
-        this.queries.push({availability: type});
+        this.query += 'Where availability = ?';
+        this.params.push(type);
         return this
     }
     property(type) {
         if (type) {
-            this.queries.push({property_type: type});
+            this.query =+ ' and property_type = ?';
+            this.params.push(type);
             return this
         }
         return this
     }
     siteStatus(status) {
-        this.queries.push({status: status});
+        this.query += ' and status = ?';
+        this.params.push(status);
         return this
     }
     build() {
-        let query = 'Where';
-        let params = [];
-        let queryList = this.queries.slice(2);
-        query += ` ${Object.keys(queryList[0])} = ?`;
-        params.push(queryList[0][Object.keys(queryList[0])]);
-        for (let i = 1; i < queryList.length; i++) {
-            query += ` and ${Object.keys(queryList[i])} = ?`;
-            params.push(queryList[i][Object.keys(queryList[i])])
+        return {
+            query: this.query, 
+            params: this.params
         }
-        query += ' Limit ?, ?';
-        params.push(((this.queries[0].page)-1)*this.queries[1].size, this.queries[1].size);
-        return {query, params}
     }
 }
 
