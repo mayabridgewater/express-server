@@ -41,10 +41,8 @@ router.get('/:apartmentId', async function(req, res, next) {
 //upload.fields([{name: 'images', maxCount: 12}])
 
 router.post('/', upload.single('main_image'), async function(req, res, next) {
-    let main_image = req.file.path;
-    main_image = main_image.split('/')[2];
+    let main_image = req.file.filename;
     main_image = '/images/'+main_image;
-    // console.log('images', req.files, req.files)
     try {
         const permission = await checkPermissions('add_apartment', JSON.parse(req.cookies.user));
         if (permission.length === 0) {
@@ -61,7 +59,6 @@ router.post('/', upload.single('main_image'), async function(req, res, next) {
 });
 
 router.put('/', function(req, res, next) {
-    console.log(req.body);
     checkPermissions('update_apartment', JSON.parse(req.cookies.user))
       .then( results => {
           if (results.length === 0) {
