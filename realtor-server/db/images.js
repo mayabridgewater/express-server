@@ -29,7 +29,7 @@ function postImages(id ,images) {
 
 function getImages(id) {
     return new Promise((resolve, reject) => {
-        connection.query(`select * from images where apartment_id = ?`, id, function(error, results, fields) {
+        connection.query(`select * from images where apartment_id = ?`, [id], function(error, results, fields) {
             if (error) {
                 console.log(error);
                 reject(error)
