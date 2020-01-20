@@ -12,6 +12,7 @@ var usersRouter = require('./routes/users');
 var apartmentsRouter = require('./routes/apartments');
 const countryRouter = require('./routes/countries');
 const cityRouter = require('./routes/cities');
+const imageRouter = require('./routes/images');
 
 
 var app = express();
@@ -36,6 +37,7 @@ app.use('/users', usersRouter);
 app.use('/apartments', apartmentsRouter);
 app.use('/countries', countryRouter);
 app.use('/cities', cityRouter);
+app.use('/images', imageRouter);
 
 
 module.exports = app;
