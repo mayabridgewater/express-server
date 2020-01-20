@@ -57,7 +57,7 @@ class Builder {
     }
     apartmentSize(sqft) {
         if (sqft) {
-            this.query =+ ' and sqft >= ?';
+            this.query += ' and sqft >= ?';
             this.params.push(sqft);
             return this
         }
