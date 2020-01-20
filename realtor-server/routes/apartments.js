@@ -9,6 +9,8 @@ const {getApartments,
 
 const {checkPermissions} = require('../db/users');
 
+const {postImages} = require('../db/images');
+
 var multer = require('multer');
 // var multer = multer;
 var storage = multer.diskStorage({
@@ -40,18 +42,25 @@ router.get('/:apartmentId', async function(req, res, next) {
     }
 });
 
-//upload.fields([{name: 'images', maxCount: 12}])
+// upload.fields([{name: 'images', maxCount: 12, name: 'main_image', maxCount: 1}])
+// upload.single('main_image')
 
-router.post('/', upload.single('main_image'), async function(req, res, next) {
-    let main_image = req.file.filename;
+router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_image', maxCount: 1}]), async function(req, res, next) {
+    let main_image = req.files.main_image[0].filename;
     main_image = '/images/'+main_image;
+    let images = [];
+    for (let i = 0; i < req.files.images.length; i++) {
+        let imagePath = req.files.images[i].filename;
+        imagePath = '/images/'+imagePath;
+        images.push(imagePath);
+    }
     try {
         const permission = await checkPermissions('add_apartment', JSON.parse(req.cookies.user));
         if (permission.length === 0) {
             res.status(400).json({error: 'Request not authorized'})
         } else {
             const newApartment = await addApartment(JSON.parse(req.cookies.user).id, req.body, main_image);
-            //send images to image table
+            const imageUpload = await postImages(newApartment[0][0].id, images);
             const update = await updateApartmentHistory(newApartment[0][0].id, newApartment[0][0].user_id, newApartment[0][0].status);
             res.status(200).json('apartment added!');
         }
