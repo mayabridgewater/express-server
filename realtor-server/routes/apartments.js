@@ -70,13 +70,14 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
 });
 
 router.put('/', function(req, res, next) {
+    console.log(req.body)
     checkPermissions('update_apartment', JSON.parse(req.cookies.user))
       .then( results => {
           if (results.length === 0) {
             res.status(400).json({error: 'Request not authorized'})
           } else {
               updateApartment(req.body)
-                .then(updateApartmentHistory(req.body.id, req.body.user_id, req.body.status, req.body.statusdescription))
+                .then(result => updateApartmentHistory(req.body.id, req.body.user_id, result[0][0].status, req.body.statusdescription))
                   .then(res.status(200).json('apartment updated, awaiting approval'))
                   .catch(error => res.status(500).json(error))
 
