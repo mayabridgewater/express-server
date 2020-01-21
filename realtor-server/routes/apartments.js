@@ -23,7 +23,6 @@ var upload = multer({ storage: storage });
 
 
 router.get('/', async function(req, res, next) {
-    console.log(req.query)
     try {
         const apartments = await getApartments(req.query);
         res.status(200).json(apartments)
@@ -70,7 +69,6 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
 });
 
 router.put('/', function(req, res, next) {
-    console.log(req.body)
     checkPermissions('update_apartment', JSON.parse(req.cookies.user))
       .then( results => {
           if (results.length === 0) {
