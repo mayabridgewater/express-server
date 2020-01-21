@@ -11,7 +11,7 @@ class Builder {
     }
     userId(userId) {
         if(userId) {
-            this.query += ' and U.user_id = ?';
+            this.query += ' and a.user_id = ?';
             this.params.push(userId);
             return this
         }
