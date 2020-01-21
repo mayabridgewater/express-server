@@ -13,6 +13,7 @@ var apartmentsRouter = require('./routes/apartments');
 const countryRouter = require('./routes/countries');
 const cityRouter = require('./routes/cities');
 const imageRouter = require('./routes/images');
+const historyRouter = require('./routes/history');
 
 
 var app = express();
@@ -26,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/signup', function(req, res, next) {
-    console.log(req.body);
     let token = crypto.pbkdf2Sync(req.body.password, 'realtorproject', 10000, 64, 'sha512');
     req.body.password = token.toString('base64');
     next();
@@ -38,6 +38,7 @@ app.use('/apartments', apartmentsRouter);
 app.use('/countries', countryRouter);
 app.use('/cities', cityRouter);
 app.use('/images', imageRouter);
+app.use('/history', historyRouter);
 
 
 module.exports = app;
