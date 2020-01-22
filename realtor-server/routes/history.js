@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {getAptHistory} = require('../db/history');
+const {getAptHistory, getUserHistory} = require('../db/history');
 
 router.get('/apartment/:apartmentId', async function(req, res, next) {
     try {
@@ -9,6 +9,15 @@ router.get('/apartment/:apartmentId', async function(req, res, next) {
         res.status(200).json(history)
     }catch(error) {
         res.status(400).json({error: error.message})
+    }
+});
+
+router.get('/user/', async function(req, res, next) {
+    try {
+        const history = await getUserHistory(req.query);
+        res.status(200).json(history)
+    }catch(error) {
+        res.status(500).json(error)
     }
 })
 
