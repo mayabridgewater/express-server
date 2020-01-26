@@ -12,9 +12,9 @@ function getAptHistory(id) {
     })
 };
 
-function getUserHistory({id, label}) {
+function getUserHistory() {
     return new Promise((resolve, reject) => {
-        connection.query(`select * from user_status_history where user_id = ? and label = ?`, [id, label], function(error, results, fields) {
+        connection.query(`select * from user_status_history`, function(error, results, fields) {
             if(error) {
                 reject(error)
             }else {
