@@ -25,7 +25,19 @@ function postImages(id ,images) {
     })
 }
 
-function getImages(id) {
+function getAllImages() {
+    return new Promise((resolve, reject) => {
+        connection.query(`select * from images`, function(error, results, fields) {
+            if(error) {
+                reject(error)
+            }else{
+                resolve(results)
+            }
+        })
+    })
+}
+
+function getImagesById(id) {
     return new Promise((resolve, reject) => {
         connection.query(`select * from images where apartment_id = ?`, [id], function(error, results, fields) {
             if (error) {
@@ -39,5 +51,6 @@ function getImages(id) {
 
 module.exports = {
     postImages,
-    getImages
+    getImagesById,
+    getAllImages
 }
