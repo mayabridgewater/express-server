@@ -1,7 +1,7 @@
 const {connection} = require('./config');
 const {Builder} = require('./aptBuilder');
 
-function getApartments({user_id, city, min_price, max_price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability='available', property_type, status='approved', page=1, size =20}) {
+function getApartments({user_id, city, min_price, max_price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability, property_type, status, page=1, size =20}) {
     return new Promise((resolve, reject) => {
        const {query, params} = new Builder()
                                     .availability(availability)

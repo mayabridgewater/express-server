@@ -12,7 +12,6 @@ const {checkPermissions} = require('../db/users');
 const {postImages} = require('../db/images');
 
 var multer = require('multer');
-// var multer = multer;
 var storage = multer.diskStorage({
   destination: 'public/images/',
   filename: function (req, file, cb) {
