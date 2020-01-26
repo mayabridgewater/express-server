@@ -1,6 +1,6 @@
 class Builder {
     constructor() {
-        this.query = '',
+        this.query = ' where 1',
         this.params = []
     }
     allApartments(page, size) {
@@ -75,13 +75,14 @@ class Builder {
         if (status) {
             this.query += ' and sale_status = ?';
             this.params.push(status);
-            return this
         }
         return this
     }
     availability(type) {
-        this.query += 'Where availability = ?';
-        this.params.push(type);
+        if (type) {
+            this.query += ' and availability = ?';
+            this.params.push(type);
+        }
         return this
     }
     property(type) {
@@ -93,8 +94,10 @@ class Builder {
         return this
     }
     siteStatus(status) {
-        this.query += ' and status = ?';
-        this.params.push(status);
+        if(status) {
+            this.query += ' and status = ?';
+            this.params.push(status);
+        }
         return this
     }
     build() {
