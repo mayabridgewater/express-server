@@ -12,6 +12,19 @@ function getCityByCountry(id) {
     })
 };
 
+function getCityById(id) {
+    return new Promise((resolve, reject) => {
+        connection.query(`select * from cities where id = ?`, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            }else { 
+                resolve(results)
+            }
+        })
+    })
+}
+
 module.exports = {
-    getCityByCountry
+    getCityByCountry,
+    getCityById
 }
