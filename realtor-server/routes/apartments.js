@@ -9,7 +9,7 @@ const {getApartments,
 
 const {checkPermissions} = require('../db/users');
 
-const {postImages} = require('../db/images');
+const {postImages, deleteImages} = require('../db/images');
 
 var multer = require('multer');
 var storage = multer.diskStorage({
@@ -40,8 +40,6 @@ router.get('/:apartmentId', async function(req, res, next) {
     }
 });
 
-// upload.fields([{name: 'images', maxCount: 12, name: 'main_image', maxCount: 1}])
-// upload.single('main_image')
 
 router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_image', maxCount: 1}]), async function(req, res, next) {
     let main_image = req.files.main_image[0].filename;
@@ -67,31 +65,38 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
     }
 });
 
-router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_main_image', maxCount: 1}]), function(req, res, next) {
-    console.log(req.body, req.files)
-    // checkPermissions('update_apartment', JSON.parse(req.cookies.user))
-    //   .then( results => {
-    //       if (results.length === 0) {
-    //         res.status(400).json({error: 'Request not authorized'})
-    //       } else {
-    //           updateApartment(req.body)
-    //             .then(result => updateApartmentHistory(req.body.id, req.body.user_id, result[0][0].status, req.body.statusdescription))
-    //               .then(res.status(200).json('apartment updated, awaiting approval'))
-    //               .catch(error => res.status(500).json(error))
-
-    //       }
-    // });
+router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_main_image', maxCount: 1}]), async function(req, res, next) {
+    let new_main_image = undefined;
+    let new_image_list = [];
+    console.log('files: ', !req.files);
+    if(req.files) {
+        if (req.files.new_main_image) {
+            new_main_image = req.files.new_main_image[0].filename;
+            new_main_image = '/images/'+new_main_image;
+        }
+        if (req.files.new_images) {
+            for (let i = 0; i < req.files.new_images.length; i++) {
+                let imagePath = req.files.new_images[i].filename;
+                imagePath = '/images/'+imagePath;
+                new_image_list.push(imagePath);
+            }
+        }
+    }
+    try {
+        const permission = await checkPermissions('update_apartment', JSON.parse(req.cookies.user))
+            if (permission.length === 0) {
+                res.status(400).json({error: 'Request not authorized'})
+            } else {
+                const updateApt = await updateApartment(req.body, new_main_image);
+                const deleteImgs = await deleteImages(req.body.id, req.body.image);
+                const postImgs = await postImages(req.body.id, new_image_list);
+                const history = await updateApartmentHistory(req.body.id, req.body.user_id, updateApt[0][0].status, req.body.statusdescription);
+                res.status(200).json('apartment updated, awaiting approval')
+            } 
+    }catch(error) {
+        res.status(500).json(console.log(error.message))
+    }
 });
-
-
-// router.post('/uploadmultiple', upload.array('myFiles', 12), function(req, res, next) {
-//     console.log('uploaded files', req.files, req.body);
-//     let result = '';
-//     for (let i = 0; i < req.files.length; i++) {
-//       result += `<img src= '../images/${req.files[i].filename}'/>` 
-//     }
-//     res.send(result)
-//   });
 
 
 

@@ -66,10 +66,18 @@ function updateApartmentHistory(apartmentId, userId, status, description) {
     });
 };
 
-function updateApartment({id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, main_image, status}) {
+function updateApartment({id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, main_image, status, image}, new_main_image) {
+    // let image_list = '';
+    // for (let i = 0; i < image.length; i++) {
+    //     if (i === image.length - 1) {
+    //         image_list += `${image[i]}`    
+    //     }else {
+    //         image_list += `${image[i]}, `
+    //     }
+    // }
     return new Promise((resolve, reject) => {
         connection.query(`call update_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-          [id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, main_image, status], 
+          [id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, new_main_image ? new_main_image : main_image, status], 
             function(error, results, fields) {
                 if (error) {
                     console.log(error);
