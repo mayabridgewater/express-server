@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const {getCountries} = require('../db/countries');
+const {getCountries, getCountryById} = require('../db/countries');
 
 router.get('/', async function(req, res, next) {
     try {
@@ -11,5 +11,14 @@ router.get('/', async function(req, res, next) {
         res.status(400).json(error)
     }
 });
+
+router.get('/:id', async function(req, res, next) {
+    try {
+        const country = await getCountryById(req.params.id);
+        res.status(200).json(country)
+    }catch (error) {
+        res.status(200).json('no country')
+    }
+})
 
 module.exports = router
