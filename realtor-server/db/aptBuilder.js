@@ -5,8 +5,8 @@ class Builder {
     }
     allApartments(page, size) {
         this.query += ' limit ?, ?';
-        this.params.push((page-1)*size);
-        this.params.push(size);
+        this.params.push(parseInt((page-1)*size));
+        this.params.push(parseInt(size));
         return this
     }
     userId(userId) {

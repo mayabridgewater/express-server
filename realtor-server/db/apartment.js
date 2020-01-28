@@ -18,7 +18,7 @@ function getApartments({user_id, city, min_price, max_price, number_of_room, num
                                     .siteStatus(status)
                                     .allApartments(page, size)
                                     .build();
-     connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
+     connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a left join cities ci on a.city_id = ci.id left join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
         if (error) {
             reject(error);
         }else {
@@ -27,6 +27,18 @@ function getApartments({user_id, city, min_price, max_price, number_of_room, num
     });
   });
 };
+
+function getNumOfApartments({status}) {
+    return new Promise((resolve, reject) => {
+        connection.query('select count(*) as count from apartments where status = ?', [status], function(error, results, fields) {
+            if(error) {
+                reject(error)
+            }else {
+                resolve(results)
+            }
+        })
+    })
+}
 
 
 function byId(apartmentId) {
@@ -54,7 +66,6 @@ function addApartment(id, {address, city, price, number_of_room, number_of_bath,
 };
 
 function updateApartmentHistory(apartmentId, userId, status, description) {
-    console.log(apartmentId);
     return new Promise((resolve, reject) => {
         connection.query(`call update_apartment_hist(?, ?, ?, ?)`, [apartmentId, userId, status, description], function(error, results, feilds) {
             if (error) {
@@ -72,10 +83,8 @@ function updateApartment({id, address, city_id, price, number_of_room, number_of
           [id, address, city_id, price, number_of_room, number_of_bath, sqft, description, sale_status, availability, property_type, new_main_image ? new_main_image : main_image, status], 
             function(error, results, fields) {
                 if (error) {
-                    console.log(error);
                     reject(error)
                 } else {
-                    console.log(results);
                     resolve(results)
                 }
         });
@@ -88,6 +97,6 @@ module.exports = {
     byId,
     addApartment,
     updateApartmentHistory,
-    updateApartment
-
+    updateApartment,
+    getNumOfApartments
 }

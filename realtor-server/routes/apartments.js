@@ -5,7 +5,8 @@ const {getApartments,
        byId, 
        addApartment, 
        updateApartmentHistory, 
-       updateApartment} = require('../db/apartment');
+       updateApartment,
+       getNumOfApartments} = require('../db/apartment');
 
 const {checkPermissions} = require('../db/users');
 
@@ -24,7 +25,8 @@ var upload = multer({ storage: storage });
 router.get('/', async function(req, res, next) {
     try {
         const apartments = await getApartments(req.query);
-        res.status(200).json(apartments)
+        const amount = await getNumOfApartments(req.query);
+        res.status(200).json({apartments: apartments, amount: amount})
     } catch(error) {
         console.log(error);
         res.status(500).json(error.message)
@@ -61,14 +63,13 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
             res.status(200).json('apartment added!');
         }
     } catch(error) {
-        res.status(400).json({error: error.message})
+        res.status(400).json(console.log(error))
     }
 });
 
 router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_main_image', maxCount: 1}]), async function(req, res, next) {
     let new_main_image = undefined;
     let new_image_list = [];
-    console.log('files: ', !req.files);
     if(req.files) {
         if (req.files.new_main_image) {
             new_main_image = req.files.new_main_image[0].filename;
@@ -88,8 +89,12 @@ router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_m
                 res.status(400).json({error: 'Request not authorized'})
             } else {
                 const updateApt = await updateApartment(req.body, new_main_image);
-                const deleteImgs = await deleteImages(req.body.id, req.body.image);
-                const postImgs = await postImages(req.body.id, new_image_list);
+                if(req.body.image) {
+                    const deleteImgs = await deleteImages(req.body.id, req.body.image);
+                }
+                if (new_image_list) {
+                    const postImgs = await postImages(req.body.id, new_image_list);
+                }
                 const history = await updateApartmentHistory(req.body.id, req.body.user_id, updateApt[0][0].status, req.body.statusdescription);
                 res.status(200).json('apartment updated, awaiting approval')
             } 
