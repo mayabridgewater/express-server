@@ -1,7 +1,7 @@
 const {connection} = require('./config');
 const {Builder} = require('./aptBuilder');
 
-function getApartments({user_id, city, min_price, max_price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability, property_type, status, page=1, size=100}) {
+function getApartments({user_id, city, min_price, max_price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability, property_type, status, page=1, size}) {
     return new Promise((resolve, reject) => {
        const {query, params} = new Builder()
                                     .availability(availability)
@@ -18,7 +18,7 @@ function getApartments({user_id, city, min_price, max_price, number_of_room, num
                                     .siteStatus(status)
                                     .allApartments(page, size)
                                     .build();
-     connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a left join cities ci on a.city_id = ci.id left join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
+     connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
         if (error) {
             reject(error);
         }else {
@@ -28,9 +28,23 @@ function getApartments({user_id, city, min_price, max_price, number_of_room, num
   });
 };
 
-function getNumOfApartments({status}) {
+function getNumOfApartments({user_id, city, min_price, max_price, number_of_room, number_of_bath, sqft, created_on, sale_status, availability, property_type, status}) {
     return new Promise((resolve, reject) => {
-        connection.query('select count(*) as count from apartments where status = ?', [status], function(error, results, fields) {
+        const {query, params} = new Builder()
+                                    .availability(availability)
+                                    .userId(user_id)
+                                    .cityId(city)
+                                    .minPrice(min_price)
+                                    .maxPrice(max_price)
+                                    .numRooms(number_of_room)
+                                    .numBaths(number_of_bath)
+                                    .apartmentSize(sqft)
+                                    .created(created_on)
+                                    .saleStatus(sale_status)
+                                    .property(property_type)
+                                    .siteStatus(status)
+                                    .build();
+        connection.query(`select count(*) as count from apartments ${query}`, params, function(error, results, fields) {
             if(error) {
                 reject(error)
             }else {
