@@ -4,10 +4,15 @@ class Builder {
         this.params = []
     }
     allApartments(page, size) {
-        this.query += ' order by a.created_on desc limit ?, ?';
-        this.params.push(parseInt((page-1)*size));
-        this.params.push(parseInt(size));
-        return this
+        if (!size) {
+            this.query += ' order by a.created_on desc'
+            return this
+        } else {
+            this.query += ' order by a.created_on desc limit ?, ?';
+            this.params.push(parseInt((page-1)*size));
+            this.params.push(parseInt(size));
+            return this
+        }
     }
     userId(userId) {
         if(userId) {
@@ -58,7 +63,7 @@ class Builder {
     apartmentSize(sqft) {
         if (sqft) {
             this.query += ' and sqft >= ?';
-            this.params.push(sqft);
+            this.params.push(parseInt(sqft));
             return this
         }
         return this
