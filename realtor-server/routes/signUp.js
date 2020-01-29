@@ -3,10 +3,11 @@ var router = express.Router();
 const {registerUser, updateUserHist} = require('../db/signUp');
 
 router.post('/', function(req, res, next) {
+  console.log(req.body);
     registerUser(req.body)
       .then(results => updateUserHist(results[0][0].id, results[0][0].status))
-      .then(res.status(200).json(`Welcome`))
-      .catch(error => res.status(500).json(console.log(error.message)))
+      .then(results => res.status(200).json(results))
+      .catch(error => res.status(200).json({error: 'not valid'}))
 });
 
 

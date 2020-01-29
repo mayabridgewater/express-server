@@ -23,7 +23,7 @@ router.put('/', async function(req, res, next) {
       res.status(400).json('error')
     }
   }catch(error) {
-    res.status(500).json({error: error.message})
+    res.status(500).json(error)
   }
 })
 

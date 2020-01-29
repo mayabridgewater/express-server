@@ -62,11 +62,11 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
             res.status(200).json('apartment added!');
         }
     } catch(error) {
-        res.status(400).json(console.log(error))
+        res.status(400).json({error: 'not valid'})
     }
 });
 
-router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_main_image', maxCount: 1}]), async function(req, res, next) {
+router.put('/', upload.fields([{name: 'new_images', maxCount: 10}, {name: 'new_main_image', maxCount: 1}]), async function(req, res, next) {
     let new_main_image = undefined;
     let new_image_list = [];
     if(req.files) {
