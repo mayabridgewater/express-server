@@ -4,7 +4,7 @@ class Builder {
         this.params = []
     }
     allApartments(page, size) {
-        this.query += ' limit ?, ?';
+        this.query += ' order by a.created_on desc limit ?, ?';
         this.params.push(parseInt((page-1)*size));
         this.params.push(parseInt(size));
         return this

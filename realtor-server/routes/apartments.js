@@ -28,7 +28,6 @@ router.get('/', async function(req, res, next) {
         const amount = await getNumOfApartments(req.query);
         res.status(200).json({apartments: apartments, amount: amount})
     } catch(error) {
-        console.log(error);
         res.status(500).json(error.message)
     }
 });
@@ -92,7 +91,7 @@ router.put('/', upload.fields([{name: 'new_images', maxCount: 12}, {name: 'new_m
                 if(req.body.image) {
                     const deleteImgs = await deleteImages(req.body.id, req.body.image);
                 }
-                if (new_image_list) {
+                if (new_image_list.length) {
                     const postImgs = await postImages(req.body.id, new_image_list);
                 }
                 const history = await updateApartmentHistory(req.body.id, req.body.user_id, updateApt[0][0].status, req.body.statusdescription);
