@@ -40,7 +40,6 @@ function updateHistory({id, status, status_description}) {
     return new Promise((resolve, reject) => {
         connection.query(`call update_user_stat_hist(?, ?, ?)`, [id, status, status_description], function(error, results, fields) {
             if(error) {
-                console.log(error)
                 reject(error)
             }else {
                 resolve(results)

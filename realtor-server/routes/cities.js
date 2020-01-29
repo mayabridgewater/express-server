@@ -19,7 +19,7 @@ router.get('/', async function(req, res, next) {
         const city = await getCityById(req.query.city_id);
         res.status(200).json(city)
     }catch(error) {
-        res.status(200).json('no city')
+        res.status(500).json('no city')
     } 
 })
 
