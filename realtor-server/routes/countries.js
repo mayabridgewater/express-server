@@ -8,7 +8,7 @@ router.get('/', async function(req, res, next) {
         const results = await getCountries();
         res.send(results)
     } catch(error) {
-        res.status(400).json(error)
+        res.status(500).json(error)
     }
 });
 
@@ -17,7 +17,7 @@ router.get('/:id', async function(req, res, next) {
         const country = await getCountryById(req.params.id);
         res.status(200).json(country)
     }catch (error) {
-        res.status(200).json('no country')
+        res.status(500).json('no country')
     }
 })
 

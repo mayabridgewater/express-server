@@ -17,10 +17,8 @@ function postImages(id ,images) {
     return new Promise((resolve, reject) => {
         connection.query(`insert into images (id, apartment_id, url) values ${query}`, params, function(error, results, fields) {
             if (error) {
-                console.log(error);
                 reject(error)
             } else {
-                console.log(results)
                 resolve(results)
             }
         })
@@ -72,7 +70,6 @@ function deleteImages(id, images) {
     return new Promise((resolve, reject) => {
         connection.query(query, params, function(error, results, fields) {
             if (error) {
-                console.log(error)
                 reject(error)
             }else {
                 resolve(results)

@@ -8,7 +8,7 @@ router.get('/', async function(req, res, next) {
         const images = await getAllImages();
         res.status(200).json(images)
     }catch(error) {
-        res.status(200).status('no images')
+        res.status(404).status('no images')
     }
 })
 

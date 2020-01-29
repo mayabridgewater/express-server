@@ -28,7 +28,7 @@ router.get('/', async function(req, res, next) {
         const amount = await getNumOfApartments(req.query);
         res.status(200).json({apartments: apartments, amount: amount})
     } catch(error) {
-        res.status(500).json(console.log(error.message))
+        res.status(404).json({error: error.message})
     }
 });
 
@@ -37,7 +37,7 @@ router.get('/:apartmentId', async function(req, res, next) {
         const apartment = await byId(req.params.apartmentId);
         res.status(200).json(apartment)
     } catch {
-        res.status(500).json({error: error.message})
+        res.status(404).json({error: error.message})
     }
 });
 
@@ -54,7 +54,7 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
     try {
         const permission = await checkPermissions('add_apartment', JSON.parse(req.cookies.user));
         if (permission.length === 0) {
-            res.status(400).json({error: 'Request not authorized'})
+            res.status(403).json({error: 'Request not authorized'})
         } else {
             const newApartment = await addApartment(JSON.parse(req.cookies.user).id, req.body, main_image);
             const imageUpload = await postImages(newApartment[0][0].id, images);
@@ -62,7 +62,7 @@ router.post('/', upload.fields([{name: 'images', maxCount: 12}, {name: 'main_ima
             res.status(200).json('apartment added!');
         }
     } catch(error) {
-        res.status(400).json({error: 'not valid'})
+        res.status(401).json({error: 'not valid'})
     }
 });
 
@@ -85,7 +85,7 @@ router.put('/', upload.fields([{name: 'new_images', maxCount: 10}, {name: 'new_m
     try {
         const permission = await checkPermissions('update_apartment', JSON.parse(req.cookies.user))
             if (permission.length === 0) {
-                res.status(400).json({error: 'Request not authorized'})
+                res.status(403).json({error: 'Request not authorized'})
             } else {
                 const updateApt = await updateApartment(req.body, new_main_image);
                 if(req.body.image) {
@@ -98,7 +98,7 @@ router.put('/', upload.fields([{name: 'new_images', maxCount: 10}, {name: 'new_m
                 res.status(200).json('apartment updated, awaiting approval')
             } 
     }catch(error) {
-        res.status(500).json(console.log(error.message))
+        res.status(401).json({error: error.message})
     }
 });
 

@@ -12,17 +12,11 @@ router.post('/', async function(req, res, next) {
       res.status(401).json({error: 'invalid email or password'})
     } else {
         res.cookie('user', JSON.stringify(user[0]), {maxAge: 1000 * 60 *60 *24});
-        console.log(req.cookies);
         res.status(200).json('logged in!');
       }
   } catch(error) {
-      res.status(500).json(error.message)
+      res.status(404).json(error.message)
   }  
-});
-
-router.get('/', (req, res, next) => {
-  console.log(req.cookies);
-  res.json(req.cookies);
 });
 
   module.exports = router

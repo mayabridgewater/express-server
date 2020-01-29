@@ -69,12 +69,11 @@ function addApartment(id, {address, city, price, number_of_room, number_of_bath,
 
         connection.query(`call add_apartment(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id, address, city, price, number_of_room, number_of_bath, sqft, description, sale_status, property_type, main_image], 
         function(error, results, fields) {
-
             if (error) {
                 reject(error);
-            } 
-                
-            else resolve(results)
+            }else {
+                resolve(results)
+            }
         });
     });
 };
