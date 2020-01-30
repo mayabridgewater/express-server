@@ -22,9 +22,16 @@ class Builder {
         }
         return this
     }
+    countryId(countryId) {
+        if (countryId) {
+            this.query += ' and co.id = ?';
+            this.params.push(countryId);
+        }
+        return this
+    }
     cityId(city) {
         if (city) {
-            this.query += ' and A.city_id = ?';
+            this.query += ' and city_id = ?';
             this.params.push(city);
             return this
         }
