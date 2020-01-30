@@ -28,7 +28,7 @@ router.get('/', async function(req, res, next) {
         const amount = await getNumOfApartments(req.query);
         res.status(200).json({apartments: apartments, amount: amount})
     } catch(error) {
-        res.status(404).json(console.log({error: error.message}))
+        res.status(404).json({error: error.message})
     }
 });
 

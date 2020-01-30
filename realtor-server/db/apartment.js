@@ -19,7 +19,6 @@ function getApartments({user_id, city, country, min_price, max_price, number_of_
                                     .siteStatus(status)
                                     .allApartments(page, size)
                                     .build();
-                        console.log(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params)
      connection.query(`SELECT a.*, ci.city_name, co.name, co.code from apartments a join cities ci on a.city_id = ci.id join countries co on ci.country_id = co.id ${query}`, params, function (error, results, fields) {
         if (error) {
             reject(error);
